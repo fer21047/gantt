@@ -3,7 +3,6 @@ import React, { useCallback, useEffect } from "react";
 import GSTC from "gantt-schedule-timeline-calendar/dist/gstc.wasm.esm.min.js";
 import { Plugin as TimelinePointer } from "gantt-schedule-timeline-calendar/dist/plugins/timeline-pointer.esm.min.js";
 import { Plugin as Selection } from "gantt-schedule-timeline-calendar/dist/plugins/selection.esm.min.js";
-import { Plugin as ItemResizing } from "gantt-schedule-timeline-calendar/dist/plugins/item-resizing.esm.min.js";
 import { Plugin as ItemMovement } from "gantt-schedule-timeline-calendar/dist/plugins/item-movement.esm.min.js";
 
 import "gantt-schedule-timeline-calendar/dist/style.css";
@@ -33,24 +32,40 @@ function generateItems() {
    * @type { import("gantt-schedule-timeline-calendar").Items }
    */
   const items = {};
-  // @ts-ignore
-  let start = GSTC.api.date().startOf("day").subtract(6, "day");
-  for (let i = 0; i < 100; i++) {
-    const id = GSTC.api.GSTCID(i.toString());
-    const rowId = GSTC.api.GSTCID(Math.floor(Math.random() * 100).toString());
-    start = start.add(1, "day");
-    items[id] = {
-      id,
-      label: `Item ${i}`,
-      rowId,
-      time: {
-        start: start.valueOf(),
-        end: start.add(1, "day").endOf("day").valueOf(),
-      },
-    };
-  }
+  const currentDate = GSTC.api.date().startOf("day");
+  
+  const item1StartDate = currentDate.add(1, "day");
+  const item1EndDate = item1StartDate.add(3, "day").endOf("day");
+
+  const item2StartDate = currentDate.add(6, "day");
+  const item2EndDate = item2StartDate.add(2, "day").endOf("day");
+
+  const item1 = {
+    id: GSTC.api.GSTCID("1"),
+    label: "Fernando Moncada Juarez",
+    rowId: GSTC.api.GSTCID("1"),
+    time: {
+      start: item1StartDate.valueOf(),
+      end: item1EndDate.valueOf(),
+    },
+  };
+
+  const item2 = {
+    id: GSTC.api.GSTCID("2"),
+    label: "Karina ALejndra Campos Caballero",
+    rowId: GSTC.api.GSTCID("2"),
+    time: {
+      start: item2StartDate.valueOf(),
+      end: item2EndDate.valueOf(),
+    },
+  };
+
+  items[item1.id] = item1;
+  items[item2.id] = item2;
+
   return items;
 }
+
 
 function initializeGSTC(element) {
   /**
@@ -59,7 +74,7 @@ function initializeGSTC(element) {
   const config = {
     licenseKey:
     "====BEGIN LICENSE KEY====\nn8dujOwD1BFeGNF4bMJsr+PykNPg1NJefLJ+xcj8sIEXuqYZG/V0XxbW0ynJThxD3REi3EATh/OD/lna5QHL77uAWPlBwnyM4yIw5WXnXtlORhAptvs48leGgG3LInHS6lLQ2VDQZGTJHPjM7ztSZYfFS+T3wThlofWmVlFvVDkhIXmfF4TYqoeck3spKP0Y27DxLqmQP5AELNE12cDySVzuS2a0D/2OnQ+s4zSX7REwi/X/C6OiUYxGqPbZ7vMHhUJ/8J/cqo3MC540OUjA1ea3W2Uoc3yucsz6WHQpkNcHOIgEfkVTu2peQYxoFNV07xyFFk0e3Hx4H3W/7u6b5w==||U2FsdGVkX1/DUN3VqpHv4oEzdor/lT/FMUPOKJCOMZEod3LwEEPlTG0baksfKMnBKwC2Nup6kLyXRRwBAMdzFMNQufBFemennh9J8L+BuhA=\nX5V1O0Mwp1wZBMx/TSgIRExgtHL2DW0XPUvQCxhGDjrvczTyaW6xHZ/TU/ph7/BAfUED7o8HE268KXxE08xlk/V/vR+h56auCtS0j4NnOaOG2VOe8Yl+FCKxto8+MpU0DcL9d8SUD7W1bNMTHej3LwX6d5uM9t7IFfg9513/iJ/GwHWLwIompsM5OR7+SvKfJM6+DdJ2pnJtAKo0PX80Bh87znmPR7yVJcZ6+RavrVc1h3yuAf7QzP1xGtdF3fhnd01T3cOa74w1EGdQIl0yntMLoDgwAuc1jtDfI9R1C8MnzaaD+tnKo9S18AVsSY8Pj3G4jE/iNU4CHI9PQigz7g==\n====END LICENSE KEY====",
-    plugins: [TimelinePointer(), Selection(), ItemResizing(), ItemMovement()],
+    plugins: [TimelinePointer(), Selection(), ItemMovement()],
     list: {
       columns: {
         data: {
